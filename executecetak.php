@@ -20,8 +20,8 @@ th, td {
 include 'connection.php';
 session_start();
 $jens = $_POST['JenisRekap'];
-$kodeMK = $_POST['rekapMatkul'];
-$kelas = $_POST['KlsRekap'];
+$kodeMK = $_POST['matkul'];
+$kelas = $_POST['kelas'];
 $btsRKP = $_POST['batasRekap'];
 
 $sqli = "SELECT * FROM matkul where kode_matkul='$kodeMK'";

@@ -144,9 +144,11 @@ if (isset($_POST['eksport']))   // it checks whether the user clicked login butt
     </div>
     <!-- /.box-header -->
     <!-- form start -->
-    <form class="form-horizontal" action="" method="post" id="form_tugas">
-      <div class="box-body">
+    <form class="form-horizontal" action="executecetak.php" method="post">
+      <input type="hidden" name="JenisRekap" value="Laporan">
+      <input type="hidden" name="batasRekap" value="5">
 
+      <div class="box-body">
 
         <div class="form-group">
           <label for="matkul" class="col-sm-2 control-label">Nama Matakuliah</label>
@@ -162,12 +164,29 @@ if (isset($_POST['eksport']))   // it checks whether the user clicked login butt
 
           <div class="col-sm-10">
             <select class="form-control select2" style="width: 100%;" id="kelas" name="kelas">
-
+              
             </select>
             <!-- <input type="text" class="form-control select2" id="inputTugKelas" name="inputTugKelas"> -->
           </div>
         </div>
 
+        <div class="form-group">
+          <label for="matkul" class="col-sm-2 control-label">Jenis Rekap</label>
+          <div class="col-sm-10">
+            <select class="form-control select2" style="width: 100%;" id="JenisRekap" name="JenisRekap">
+              <option >-- pilih jenis laporan --</option>
+              <option value="Laporan">Laporan</option>
+              <option value="Tugas">Tugas</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="matkul" class="col-sm-2 control-label">Batas Rekap</label>
+          <div class="col-sm-10">
+            <input type="number" class="form-control" name="batasRekap">
+          </div>
+        </div>
 
 
 
@@ -183,9 +202,7 @@ if (isset($_POST['eksport']))   // it checks whether the user clicked login butt
 
           <div class="col-sm-10">
             <div class="box-footer">
-              <input type="hidden" name="eksport" value="">
-              <!-- <button type="submit" class="btn btn-default" onclick="balik();return false;">Batal</button> -->
-              <button type="button" class="btn btn-info pull-right" name="eksport" id="eksport">Eksport</button>
+              <button type="submit" class="btn btn-info pull-right" name="submit">Eksport</button>
             </div>
             <!-- /.box -->
           </div>
