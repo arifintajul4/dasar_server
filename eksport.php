@@ -164,7 +164,7 @@ if (isset($_POST['eksport']))   // it checks whether the user clicked login butt
 
           <div class="col-sm-10">
             <select class="form-control select2" style="width: 100%;" id="kelas" name="kelas">
-              
+
             </select>
             <!-- <input type="text" class="form-control select2" id="inputTugKelas" name="inputTugKelas"> -->
           </div>
@@ -174,7 +174,7 @@ if (isset($_POST['eksport']))   // it checks whether the user clicked login butt
           <label for="matkul" class="col-sm-2 control-label">Jenis Rekap</label>
           <div class="col-sm-10">
             <select class="form-control select2" style="width: 100%;" id="JenisRekap" name="JenisRekap">
-              <option >-- pilih jenis laporan --</option>
+              <option >Pilih Jenis Rekap...</option>
               <option value="Laporan">Laporan</option>
               <option value="Tugas">Tugas</option>
             </select>
