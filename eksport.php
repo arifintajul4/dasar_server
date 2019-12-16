@@ -177,6 +177,7 @@ if (isset($_POST['eksport']))   // it checks whether the user clicked login butt
               <option >Pilih Jenis Rekap...</option>
               <option value="Laporan">Laporan</option>
               <option value="Tugas">Tugas</option>
+              <option value="Pretest">Pretest</option>
             </select>
           </div>
         </div>

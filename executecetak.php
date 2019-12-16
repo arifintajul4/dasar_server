@@ -35,7 +35,7 @@ if ($resu->num_rows > 0) {
    
 
 
-$file="REKAP LAPORAN ".$matk." KELAS ".strtoupper($kelas).".xls";
+$file="REKAP ".$jens." ".$matk." KELAS ".strtoupper($kelas).".xls";
 header("Content-type: application/vnd.ms-excel");
 header("Content-Disposition: attachment; filename=$file");
 
