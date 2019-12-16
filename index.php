@@ -148,6 +148,9 @@ function tbhinfo() {
   $('#mainDiv').load('tbhinform.php');
 }
 
+function rekap() {
+  $('#mainDiv').load('eksport.php');
+}
 
 </script>
 

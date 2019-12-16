@@ -122,7 +122,7 @@ $(document).ready(function(){
                             <li><a href="#" onclick="input_tgs();return false;">Tugas</a></li>
                             </ul>
                             </li>
-
+                            <li><a href="#" onclick="rekap();return false;">Rekap</a></li>
                             <!-- <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Absensi Asisten <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">

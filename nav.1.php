@@ -90,7 +90,7 @@
                             <li><a href="#">Tugas</a></li>
                             </ul>
                         </li>
-                        
+                        <li><a href="#" onclick="rekap();return false;">Rekap</a></li>
                         </ul>
                         <?php
                     }else{

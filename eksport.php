@@ -1,4 +1,8 @@
-<?php session_start();
+<?php
+
+use Illuminate\Mail\Message;
+
+session_start();
 include 'connection.php';
 $mk = "SELECT * FROM matkul";
 $result = $conn->query($mk);
@@ -12,11 +16,45 @@ if ($result->num_rows > 0) {
   echo "0 results";
 }
 
+if (isset($_POST['matkul']) && isset($_POST['kelas']))
+{
+  $mk = $_POST['matkul'];
+  $kls = $_POST['kelas'];
+  $query = "SELECT * FROM mhs_detail WHERE kode_matkul='".$mk."' AND kelas_mhs = '".$kls."'";
+  $result = $conn->query($query);
+  if ($result->num_rows > 0) {
+    
+  }else{
+    $result= "Data Kosong";
+  }
+  //echo json_encode($result->fetch_assoc());
+  exit;
+}
+
+
+if (isset($_POST['matkul']))
+{
+  $mk = $_POST['matkul'];
+  $query = "SELECT * FROM `matkul_detail` WHERE `kode_matkul` = '".$mk."'";
+  $result = $conn->query($query);
+
+  if ($result->num_rows > 0) {
+    $kelas = '<option>Pilih Kelas...</option>';
+    while ($row = $result->fetch_assoc()) {
+      $kelas .= '<option  value="' . $row['kelas_matkul'] . '">' .  $row['kelas_matkul'] . '</option>';
+    }
+    echo $kelas;
+  }else{
+    echo "0 results";
+  }
+  //echo json_encode($result->fetch_assoc());
+  exit;
+}
 
 if (isset($_POST['inputTugas']))   // it checks whether the user clicked login button or not 
 {
   $nimTug = $_POST['inputTugNIM'];
-  $kdMKTug = $_POST['tmbhInfoNama'];
+  $kdMKTug = $_POST['matkul'];
   $kelasTug = $_POST['inputTugKelas'];
   $TugKe = $_POST['inputTugKe'];
   $nilaiTug = $_POST['inputTugNilai'];
@@ -57,8 +95,8 @@ if (isset($_POST['inputTugas']))   // it checks whether the user clicked login b
 
 if (isset($_POST['eksport']))   // it checks whether the user clicked login button or not 
 {
-  $kdMKTug = $_POST['tmbhInfoNama'];
-  $kelasTug = $_POST['inputKelas'];
+  $kdMKTug = $_POST['matkul'];
+  $kelasTug = $_POST['kelas'];
 
   if (isset($_SESSION['use'])) {
 
@@ -111,19 +149,19 @@ if (isset($_POST['eksport']))   // it checks whether the user clicked login butt
 
 
         <div class="form-group">
-          <label for="tmbhInfoNama" class="col-sm-2 control-label">Nama Matakuliah</label>
+          <label for="matkul" class="col-sm-2 control-label">Nama Matakuliah</label>
           <div class="col-sm-10">
-            <select class="form-control select2" style="width: 100%;" id="tmbhInfoNama" name="tmbhInfoNama">
+            <select class="form-control select2" style="width: 100%;" id="matkul" name="matkul">
               <?php echo $pilihmk ?>
             </select>
           </div>
         </div>
 
         <div class="form-group">
-          <label for="inputKelas" class="col-sm-2 control-label">Kelas</label>
+          <label for="kelas" class="col-sm-2 control-label">Kelas</label>
 
           <div class="col-sm-10">
-            <select class="form-control select2" style="width: 100%;" id="inputKelas" name="inputKelas">
+            <select class="form-control select2" style="width: 100%;" id="kelas" name="kelas">
 
             </select>
             <!-- <input type="text" class="form-control select2" id="inputTugKelas" name="inputTugKelas"> -->
@@ -147,7 +185,7 @@ if (isset($_POST['eksport']))   // it checks whether the user clicked login butt
             <div class="box-footer">
               <input type="hidden" name="eksport" value="">
               <!-- <button type="submit" class="btn btn-default" onclick="balik();return false;">Batal</button> -->
-              <button type="submit" class="btn btn-info pull-right" id="eksport">Eksport</button>
+              <button type="button" class="btn btn-info pull-right" name="eksport" id="eksport">Eksport</button>
             </div>
             <!-- /.box -->
           </div>
@@ -161,51 +199,6 @@ if (isset($_POST['eksport']))   // it checks whether the user clicked login butt
 
     </form>
   </div>
-  <!-- /.box -->
-
-
-  <div class="box">
-    <div class="box-header">
-      <h3 class="box-title">Data Nilai</h3>
-    </div>
-    <!-- /.box-header -->
-    <div class="box-body">
-      <button class="btn btn-default btn-flat hapus_semua_tugas" id="tugas">Bersihkan semua data</button>
-      <table id="example1" class="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th>NIM</th>
-            <th>Kode Matakuliah</th>
-            <th>Kelas</th>
-            <th>Tugas ke-</th>
-            <th>Nilai</th>
-            <th>Tanggal Input</th>
-            <th>Edit</th>
-            <th>Hapus</th>
-          </tr>
-        </thead>
-        <tbody>
-
-
-
-        </tbody>
-        <tfoot>
-          <tr>
-            <th>NIM</th>
-            <th>Matakuliah</th>
-            <th>Kelas</th>
-            <th>Tugas ke-</th>
-            <th>Nilai</th>
-            <th>Tanggal Input</th>
-            <th>Edit</th>
-            <th>Hapus</th>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-    <!-- /.box-body -->
-  </div>
-  <!-- /.box -->
 
 </section>
 
@@ -249,38 +242,22 @@ if (isset($_POST['eksport']))   // it checks whether the user clicked login butt
   };
 
   $(function() {
-    $('#example1').DataTable({
-      'paging': false,
-      'lengthChange': true,
-      'searching': true,
-      'ordering': true,
-      'info': true,
-      'autoWidth': true
-    })
 
-    // handle form untuk submit
-    $("#form_tugas").submit(function(e) {
-      e.preventDefault();
 
-      $.ajax({
-        url: "inpt_tugas.php",
-        method: "post",
-        data: $(this).serializeObject(),
-        success: function(data) {
-          $('#detail_tugas').html(data);
-          $('#modal-tugas').modal("show");
-        }
+    // handle ketika klik eksport
+    $('#eksport').on('click', function() {
 
-      });
-    });
+      var matkul = $('#matkul').val();
+      var kelas = $('#kelas').val();
+      console.log(matkul +' '+kelas);
 
-    // handle ketika pilih matkul
-    $('#tmbhInfoNama').on('change', function() {
       $.ajax({
         url: "eksport.php",
         method: "post",
+        type: 'JSON',
         data: {
-          kode_mk: this.value
+          matkul: matkul,
+          kelas: kelas
         },
         success: function(data) {
           console.log(data)
@@ -289,81 +266,22 @@ if (isset($_POST['eksport']))   // it checks whether the user clicked login butt
       });
     });
 
-
-    $('.edit_tugas').click(function() {
-      var tgl_input = $(this).attr("id");
-
+    // handle ketika klik eksport
+    $('#matkul').on('change', function() {
+      var matkul = $('#matkul').val();
       $.ajax({
-        url: "fileMK.php",
+        url: "eksport.php",
         method: "post",
+        type: 'text',
         data: {
-          tgl_input: tgl_input
+          matkul: matkul
         },
         success: function(data) {
-          $('#detail_tugasEdt').html(data);
-          $('#modal-tugasEdt').modal("show");
+          $('#kelas').html(data);
         }
 
       });
     });
 
-    $('.hapus_semua_tugas').click(function() {
-      var tugas = $(this).attr("id");
-
-      $.ajax({
-        url: "hapusdsn.php",
-        method: "post",
-        data: {
-          tugas: tugas
-        },
-        success: function(data) {
-          $('#detail_tugasEdt').html(data);
-          $('#modal-tugasEdt').modal("show");
-        }
-
-      });
-    })
-
-    $('.hapus_tugas').click(function() {
-      var tgl_input = $(this).attr("id");
-
-      $.ajax({
-        url: "filePretest.php",
-        method: "post",
-        data: {
-          tgl_input: tgl_input
-        },
-        success: function(data) {
-          $('#detail_tugasEdt').html(data);
-          $('#modal-tugasEdt').modal("show");
-        }
-
-      });
-    })
-
-
   })
 </script>
-
-
-<!-- Files Modals -->
-<div class="modal modal-tugasEdt fade" id="modal-tugasEdt">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Edit Tugas&hellip;</h4>
-      </div>
-      <div class="modal-body" id="detail_tugasEdt">
-
-
-      </div>
-
-
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
